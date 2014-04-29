@@ -50,7 +50,7 @@
 
 //These two have to be above people_tracking_filter/tracker_kalman.h otherwise things fuck up.
 #include <dynamic_reconfigure/server.h>
-#include <leg_detector2/LegDetectorConfig.h>
+#include <leg_detector/LegDetectorConfig.h>
 
 
 #include "people_tracking_filter/tracker_kalman.h"
@@ -282,7 +282,7 @@ public:
   ros::Publisher leg_measurements_pub_;
   ros::Publisher markers_pub_;
 
-  dynamic_reconfigure::Server<leg_detector2::LegDetectorConfig> server_;
+  dynamic_reconfigure::Server<leg_detector::LegDetectorConfig> server_;
 
   message_filters::Subscriber<people_msgs::PositionMeasurement> people_sub_;
   message_filters::Subscriber<sensor_msgs::LaserScan> laser_sub_;
@@ -322,7 +322,7 @@ public:
     laser_notifier_.registerCallback(boost::bind(&LegDetector::laserCallback, this, _1));
     laser_notifier_.setTolerance(ros::Duration(0.01));
 
-    dynamic_reconfigure::Server<leg_detector2::LegDetectorConfig>::CallbackType f;
+    dynamic_reconfigure::Server<leg_detector::LegDetectorConfig>::CallbackType f;
     f = boost::bind(&LegDetector::configure, this, _1, _2);
     server_.setCallback(f);
 
@@ -334,7 +334,7 @@ public:
   {
   }
 
-  void configure(leg_detector2::LegDetectorConfig &config, uint32_t level) {
+  void configure(leg_detector::LegDetectorConfig &config, uint32_t level) {
     connected_thresh_       = config.connection_threshold;
     min_points_per_group    = config.min_points_per_group;
     leg_reliability_limit_  = config.leg_reliability_limit;
